@@ -6,6 +6,7 @@ import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
+import classNames from 'classnames';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -23,6 +24,9 @@ export const App: React.FC = () => {
         setTodos(newTodos);
       } catch (error) {
         setErrorMessage('Unable to load todos');
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 3000);
         throw error;
       } finally {
         setLoading(false);
@@ -54,7 +58,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
+          {/* this button should have active class only if all todos are completed */}
           <button
             type="button"
             className="todoapp__toggle-all active"
@@ -72,29 +76,31 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <TodoList todos={todos} />
+        <TodoList todos={filtredTodos} />
 
         {/* Hide the footer if there are no todos */}
-        {todos.length > 0 && <TodoFooter />}
+        {todos.length > 0 && (
+          <TodoFooter todos={todos} onStatusChange={setStatus} />
+        )}
       </div>
 
       {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
+        className={classNames(
+          'notification is-danger is-light has-text-weight-normal',
+          { hidden: !errorMessage },
+        )}
       >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={() => setErrorMessage('')}
+        />
         {/* show only one message at a time */}
-        Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
+        {errorMessage}
       </div>
     </div>
   );

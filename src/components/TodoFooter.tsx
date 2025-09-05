@@ -1,17 +1,27 @@
 import classNames from 'classnames';
 import React, { useState } from 'react';
+import { Todo } from '../types/Todo';
 
 type Props = {
-  onStatusChange: (status: string) => void;
+  todos: Todo[];
+  onStatusChange: (status: 'All' | 'Active' | 'Completed') => void;
 };
 
-export const TodoFooter: React.FC<Props> = ({ onStatusChange }) => {
+export const TodoFooter: React.FC<Props> = ({ todos, onStatusChange }) => {
   const [status, setStatus] = useState<'All' | 'Active' | 'Completed'>('All');
+
+  const handleStatusChange = (option: 'All' | 'Active' | 'Completed') => {
+    setStatus(option);
+    onStatusChange(option);
+  };
+
+  const completedTodos = todos.filter(todo => todo.completed);
+  const notCompletedTodos = todos.filter(todo => !todo.completed);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        3 items left
+        {notCompletedTodos.length} items left
       </span>
 
       {/* Active link should have the 'selected' class */}
@@ -22,8 +32,7 @@ export const TodoFooter: React.FC<Props> = ({ onStatusChange }) => {
           data-cy="FilterLinkAll"
           onClick={e => {
             e.preventDefault();
-
-            setStatus('All');
+            handleStatusChange('All');
           }}
         >
           All
@@ -37,8 +46,7 @@ export const TodoFooter: React.FC<Props> = ({ onStatusChange }) => {
           data-cy="FilterLinkActive"
           onClick={e => {
             e.preventDefault();
-
-            setStatus('Active');
+            handleStatusChange('Active');
           }}
         >
           Active
@@ -52,8 +60,7 @@ export const TodoFooter: React.FC<Props> = ({ onStatusChange }) => {
           data-cy="FilterLinkCompleted"
           onClick={e => {
             e.preventDefault();
-
-            setStatus('Completed');
+            handleStatusChange('Completed');
           }}
         >
           Completed
@@ -65,6 +72,7 @@ export const TodoFooter: React.FC<Props> = ({ onStatusChange }) => {
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        disabled={completedTodos.length === 0}
       >
         Clear completed
       </button>
