@@ -1,28 +1,26 @@
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React from 'react';
 import { Todo } from '../types/Todo';
 import { Status } from '../types/Status';
 
 type Props = {
   todos: Todo[];
+  status: Status;
   onStatusChange: (status: Status) => void;
 };
 
-export const TodoFooter: React.FC<Props> = ({ todos, onStatusChange }) => {
-  const [status, setStatus] = useState<Status>('All');
-
-  const handleStatusChange = (option: Status) => {
-    setStatus(option);
-    onStatusChange(option);
-  };
-
+export const TodoFooter: React.FC<Props> = ({
+  todos,
+  status,
+  onStatusChange,
+}) => {
   const completedTodos = todos.filter(todo => todo.completed);
-  const notCompletedTodos = todos.filter(todo => !todo.completed);
+  const activeTodos = todos.filter(todo => !todo.completed);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {notCompletedTodos.length} items left
+        {activeTodos.length} items left
       </span>
 
       {/* Active link should have the 'selected' class */}
@@ -33,7 +31,7 @@ export const TodoFooter: React.FC<Props> = ({ todos, onStatusChange }) => {
           data-cy="FilterLinkAll"
           onClick={e => {
             e.preventDefault();
-            handleStatusChange('All');
+            onStatusChange('All');
           }}
         >
           All
@@ -47,7 +45,7 @@ export const TodoFooter: React.FC<Props> = ({ todos, onStatusChange }) => {
           data-cy="FilterLinkActive"
           onClick={e => {
             e.preventDefault();
-            handleStatusChange('Active');
+            onStatusChange('Active');
           }}
         >
           Active
@@ -61,7 +59,7 @@ export const TodoFooter: React.FC<Props> = ({ todos, onStatusChange }) => {
           data-cy="FilterLinkCompleted"
           onClick={e => {
             e.preventDefault();
-            handleStatusChange('Completed');
+            onStatusChange('Completed');
           }}
         >
           Completed

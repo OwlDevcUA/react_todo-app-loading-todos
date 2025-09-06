@@ -9,6 +9,7 @@ import { TodoFooter } from './components/TodoFooter';
 import { ErrorNotification } from './components/ErrorNotification';
 import { Status } from './types/Status';
 import { ErrorMessage } from './types/ErorrMessage';
+import { TodoHeader } from './components/TodoHeader';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -54,30 +55,13 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this button should have active class only if all todos are completed */}
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
-          />
-
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
+        <TodoHeader todos={todos}/>
 
         <TodoList todos={filtredTodos} />
 
         {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
-          <TodoFooter todos={todos} onStatusChange={setStatus} />
+          <TodoFooter todos={todos} status={status} onStatusChange={setStatus} />
         )}
       </div>
 
