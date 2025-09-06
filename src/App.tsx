@@ -6,18 +6,15 @@ import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
-import classNames from 'classnames';
+import { ErrorNotification } from './components/ErrorNotification';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [status, setStatus] = useState<'All' | 'Active' | 'Completed'>('All');
 
   useEffect(() => {
     async function loadTodos() {
-      setLoading(true);
-
       try {
         const newTodos = await getTodos();
 
@@ -28,8 +25,6 @@ export const App: React.FC = () => {
           setErrorMessage('');
         }, 3000);
         throw error;
-      } finally {
-        setLoading(false);
       }
     }
 
@@ -86,22 +81,10 @@ export const App: React.FC = () => {
 
       {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className={classNames(
-          'notification is-danger is-light has-text-weight-normal',
-          { hidden: !errorMessage },
-        )}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={() => setErrorMessage('')}
-        />
-        {/* show only one message at a time */}
-        {errorMessage}
-      </div>
+      <ErrorNotification
+        errorMessage={errorMessage}
+        onClearMessage={() => setErrorMessage('')}
+      />
     </div>
   );
 };
