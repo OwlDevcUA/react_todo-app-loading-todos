@@ -7,11 +7,13 @@ import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
 import { ErrorNotification } from './components/ErrorNotification';
+import { Status } from './types/Status';
+import { ErrorMessage } from './types/ErorrMessage';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [status, setStatus] = useState<'All' | 'Active' | 'Completed'>('All');
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage | ''>('');
+  const [status, setStatus] = useState<Status>('All');
 
   useEffect(() => {
     async function loadTodos() {

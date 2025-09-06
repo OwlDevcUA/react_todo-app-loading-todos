@@ -1,16 +1,17 @@
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { Todo } from '../types/Todo';
+import { Status } from '../types/Status';
 
 type Props = {
   todos: Todo[];
-  onStatusChange: (status: 'All' | 'Active' | 'Completed') => void;
+  onStatusChange: (status: Status) => void;
 };
 
 export const TodoFooter: React.FC<Props> = ({ todos, onStatusChange }) => {
-  const [status, setStatus] = useState<'All' | 'Active' | 'Completed'>('All');
+  const [status, setStatus] = useState<Status>('All');
 
-  const handleStatusChange = (option: 'All' | 'Active' | 'Completed') => {
+  const handleStatusChange = (option: Status) => {
     setStatus(option);
     onStatusChange(option);
   };
