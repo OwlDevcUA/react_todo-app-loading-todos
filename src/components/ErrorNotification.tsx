@@ -25,7 +25,6 @@ export const ErrorNotification: React.FC<Props> = ({
         className="delete"
         onClick={() => onClearMessage()}
       />
-      {/* show only one message at a time */}
       {errorMessage}
     </div>
   );

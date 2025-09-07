@@ -1,5 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control /
-/ eslint-disable jsx-a11y/control-has-associated-label */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 
 import classNames from 'classnames';
 import React, { useState } from 'react';
@@ -54,7 +53,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             {todo.title}
           </span>
 
-          {/* Remove button appears only on hover */}
           <button type="button" className="todo__remove" data-cy="TodoDelete">
             ×
           </button>

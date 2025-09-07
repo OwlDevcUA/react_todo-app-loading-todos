@@ -14,7 +14,7 @@ import { TodoHeader } from './components/TodoHeader';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<ErrorMessage | ''>('');
-  const [status, setStatus] = useState<Status>('All');
+  const [status, setStatus] = useState<Status>(Status.ALL);
 
   useEffect(() => {
     async function loadTodos() {
@@ -23,7 +23,7 @@ export const App: React.FC = () => {
 
         setTodos(newTodos);
       } catch (error) {
-        setErrorMessage('Unable to load todos');
+        setErrorMessage(ErrorMessage.LOAD);
         setTimeout(() => {
           setErrorMessage('');
         }, 3000);
@@ -55,18 +55,19 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <TodoHeader todos={todos}/>
+        <TodoHeader todos={todos} />
 
         <TodoList todos={filtredTodos} />
 
-        {/* Hide the footer if there are no todos */}
-        {todos.length > 0 && (
-          <TodoFooter todos={todos} status={status} onStatusChange={setStatus} />
+        {!!todos.length && (
+          <TodoFooter
+            todos={todos}
+            status={status}
+            onStatusChange={setStatus}
+          />
         )}
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <ErrorNotification
         errorMessage={errorMessage}
         onClearMessage={() => setErrorMessage('')}

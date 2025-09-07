@@ -17,22 +17,26 @@ export const TodoFooter: React.FC<Props> = ({
   const completedTodos = todos.filter(todo => todo.completed);
   const activeTodos = todos.filter(todo => !todo.completed);
 
+  const handleStatusChange = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    newStatus: Status,
+  ) => {
+    event.preventDefault();
+    onStatusChange(newStatus);
+  };
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
         {activeTodos.length} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
           className={classNames('filter__link', { selected: status === 'All' })}
           data-cy="FilterLinkAll"
-          onClick={e => {
-            e.preventDefault();
-            onStatusChange('All');
-          }}
+          onClick={e => handleStatusChange(e, Status.ALL)}
         >
           All
         </a>
@@ -43,10 +47,7 @@ export const TodoFooter: React.FC<Props> = ({
             selected: status === 'Active',
           })}
           data-cy="FilterLinkActive"
-          onClick={e => {
-            e.preventDefault();
-            onStatusChange('Active');
-          }}
+          onClick={e => handleStatusChange(e, Status.ACTIVE)}
         >
           Active
         </a>
@@ -57,21 +58,17 @@ export const TodoFooter: React.FC<Props> = ({
             selected: status === 'Completed',
           })}
           data-cy="FilterLinkCompleted"
-          onClick={e => {
-            e.preventDefault();
-            onStatusChange('Completed');
-          }}
+          onClick={e => handleStatusChange(e, Status.COMPLETED)}
         >
           Completed
         </a>
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        disabled={completedTodos.length === 0}
+        disabled={!completedTodos.length}
       >
         Clear completed
       </button>
